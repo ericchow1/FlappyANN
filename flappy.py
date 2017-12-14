@@ -10,6 +10,7 @@ import pygame
 import random
 import numpy
 import os
+import ANN
 
 # Define Const
 CONST_GRAVITY = 10
@@ -25,6 +26,7 @@ CONST_PATH = CONST_PATH[0:(len(CONST_PATH)-9)]
 CONST_PIPEWIDTH = 50
 CONST_BIRD_START_X = 50
 CONST_BIRD_START_Y = 200
+
   
 
 
@@ -49,9 +51,12 @@ class BG():
 class Bird(pygame.sprite.Sprite):
     
     def __init__(self):
+    
+        # Init ANN
+        self.ANN = ANN.Unit()
         
+    def reset(self):
         pygame.sprite.Sprite.__init__(self)
-        
         self.BirdUp = pygame.image.load(CONST_PATH+"images/bird_wing_up.png").convert_alpha()
         self.BirdDown = pygame.image.load(CONST_PATH+"images/bird_wing_down.png").convert_alpha()
         self.imageList = ([self.BirdUp, self.BirdDown])
@@ -81,13 +86,16 @@ class Bird(pygame.sprite.Sprite):
     
         # set borders
         self.posY = self.posY + boost;
-        if (self.posY < 0 ):
+        if (self.posY <= 10 ):
             self.posY = 0
+            return True;
 
         if (self.posY >= 480):
             self.posY = 480
+            return True;
 
         self.posX = self.posX
+        return False;
 
     def mask(self):
        return pygame.mask.from_surface(self.image)
@@ -159,7 +167,6 @@ class Pipe(pygame.sprite.Sprite):
             self.rect = pygame.Rect(self.position[counter][0] , self.position[counter][1] , self.height[counter] , 32)
 
             if pygame.sprite.collide_mask(self, bird) is not None:
-                print (self.number)
                 return True;
 
         return False;
@@ -175,11 +182,12 @@ def get_distance(obstacle,bird):
     
     
     vertical_distance = int(CONST_SCREENHEIGHT - bird.posY - (obstacle[index].height[0] + (CONST_HOLESIZE/2)))
+    horizontal_percentage = ( horizontal_distance / CONST_SCREENWIDTH)
+    vertical_percentage = ( vertical_distance / CONST_SCREENHEIGHT )
+    return (horizontal_percentage , vertical_percentage)
 
-    print (horizontal_distance , vertical_distance)
 
-
-def game_start():
+def game_start(player,generation):
     
 
     # Init the game
@@ -193,12 +201,14 @@ def game_start():
     background = BG()
     
     # Init player
-    global player
-    player = Bird()
+    player.reset()
     
     # Init time label
     clock = pygame.time.Clock()
     font = pygame.font.Font(None, 36)
+    
+    # Init generation label
+    generationLabel = font.render("Generation: " + str(generation), 1, (255,255,0))
     
     # Init pipe
     global obstacle1
@@ -222,6 +232,8 @@ def game_start():
     Bool_HoldKey = 0
     Bool_GameOver = False
     
+    scalingTime = (round(pygame.time.get_ticks()/1000)-1)
+    
     while 1:
         # No FPS over 10
         clock.tick(CONST_FPS)
@@ -229,14 +241,17 @@ def game_start():
         
         # Game Ending
         if Bool_GameOver == True:
-            print("Game Over: %i " % int(pygame.time.get_ticks()/1000))
+            print("Game Over: %i " % (int(pygame.time.get_ticks()/1000)-scalingTime))
             break;
     
         # Event handeling
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                pygame.quit()
                 sys.exit()
-    
+                return int(pygame.time.get_ticks()/1000-scalingTime)
+            
+            
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE and Bool_HoldKey == 0:
                     Bool_HoldKey = 1
@@ -247,7 +262,8 @@ def game_start():
                     Bool_HoldKey = 0
  
         # Gravity force
-        player.move(CONST_GRAVITY)
+        Bool_GameOver = player.move(CONST_GRAVITY)
+        print (player.posX,player.posY)
  
         # Run Animations
         background.animation()
@@ -275,9 +291,10 @@ def game_start():
         obstacle3.animation(background.pos)
         obstacle4.animation(background.pos)
         
-        # Update time
-        time = font.render(str(int(pygame.time.get_ticks()/1000)), 10, (0,0,0))
+        # Update time label
+        time = font.render(str("Time: "+str((int(pygame.time.get_ticks()/1000)-scalingTime))), 10, (0,0,0))
         textpos = time.get_rect()
+
         
         # check for collision
         pipe_collision = any(p.collides_with(player) for p in obstacle)
@@ -301,13 +318,29 @@ def game_start():
         
         screen.blit(player.image, player.rect)
         screen.blit(time, (5,5))
+        screen.blit(generationLabel, (0, 50))
         pygame.display.update()
 
-        get_distance(obstacle,player)
 
 
+        # BIRD ANN
+        (x,y) = get_distance(obstacle,player)
+        if player.ANN.activeBrain(x,y ) > 0.5:
+            player.flap()
+        
+        print (player.ANN.activeBrain( x,y ))
 
 
+def main():
+    
+    global player
+    player = Bird()
+    i = 1
+    while( i < 50):
+        weight = game_start(player,i)
+        player.ANN.train(weight )
+        print ("GAME " + str(i))
+        i +=1
 
 
 main()

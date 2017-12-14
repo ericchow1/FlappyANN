@@ -6,11 +6,46 @@
 	objectVersion = 48;
 	objects = {
 
+/* Begin PBXFileReference section */
+		4DCE73851FD556C800EBEA06 /* bird_wing_up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bird_wing_up.png; sourceTree = "<group>"; };
+		4DCE73861FD556C800EBEA06 /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
+		4DCE73871FD556C800EBEA06 /* bird_wing_down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bird_wing_down.png; sourceTree = "<group>"; };
+		4DCE73881FD556C800EBEA06 /* ground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ground.png; sourceTree = "<group>"; };
+		4DCE73891FD556C800EBEA06 /* pipe.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pipe.png; sourceTree = "<group>"; };
+		4DCE738A1FD556C800EBEA06 /* pipe_body.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pipe_body.png; sourceTree = "<group>"; };
+		4DCE738B1FD556C800EBEA06 /* bird.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = bird.gif; sourceTree = "<group>"; };
+		4DCE738C1FD556C800EBEA06 /* pipe_end.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pipe_end.png; sourceTree = "<group>"; };
+		4DCE738D1FD556C800EBEA06 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		4DCE738E1FD556C800EBEA06 /* ANN copy.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = "ANN copy.py"; sourceTree = "<group>"; };
+		4DCE738F1FD556C800EBEA06 /* flappy.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = flappy.py; sourceTree = "<group>"; };
+		4DCE73901FD556C800EBEA06 /* ANN.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ANN.py; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
 /* Begin PBXGroup section */
 		4DCE73791FD553E900EBEA06 = {
 			isa = PBXGroup;
 			children = (
+				4DCE738E1FD556C800EBEA06 /* ANN copy.py */,
+				4DCE73901FD556C800EBEA06 /* ANN.py */,
+				4DCE738F1FD556C800EBEA06 /* flappy.py */,
+				4DCE73841FD556C800EBEA06 /* images */,
+				4DCE738D1FD556C800EBEA06 /* README.md */,
 			);
+			sourceTree = "<group>";
+		};
+		4DCE73841FD556C800EBEA06 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				4DCE73851FD556C800EBEA06 /* bird_wing_up.png */,
+				4DCE73861FD556C800EBEA06 /* background.png */,
+				4DCE73871FD556C800EBEA06 /* bird_wing_down.png */,
+				4DCE73881FD556C800EBEA06 /* ground.png */,
+				4DCE73891FD556C800EBEA06 /* pipe.png */,
+				4DCE738A1FD556C800EBEA06 /* pipe_body.png */,
+				4DCE738B1FD556C800EBEA06 /* bird.gif */,
+				4DCE738C1FD556C800EBEA06 /* pipe_end.png */,
+			);
+			path = images;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
